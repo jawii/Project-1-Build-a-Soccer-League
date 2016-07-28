@@ -3,8 +3,7 @@ import random
 from datetime import date
 from operator import itemgetter, attrgetter
 
-first_practise_day = "14th July"
-first_practise_time = "5 pm"
+
 
 #'Soccer Experience': 
 #'Height' (inches)': '44', 
@@ -15,6 +14,12 @@ league = []
 sharks = []
 dragons = []
 raptors = []
+dragons_practise_day = "March 17"
+dragons_practise_time = "1pm"
+sharks_practise_day = "March 17"
+sharks_practise_time = "3pm"
+raptors_practise_day = "March 18"
+raptors_practise_time = "1pm"
 
 # Reads the csv-file
 with open('soccer_players.csv') as csvfile:
@@ -24,6 +29,7 @@ with open('soccer_players.csv') as csvfile:
 
 def print_players(lst, team_name):
     print ("There are {} players in {}".format(len(lst), team_name))
+    print ("-------------------------")
     print ("")
     for player in lst:
         print ("Name: ", player['Name'])
@@ -33,7 +39,7 @@ def print_players(lst, team_name):
         if 'Team name' in player.keys():
             print ("Team name: ", player['Team name'])
 
-        print ("")
+        print ("--------------------")
         
 def split_list(lst, parts):
     return [lst[i::parts] for i in range(parts)]
@@ -84,16 +90,26 @@ def write_letter(player):
     player["Team name"] = ""
     if player in raptors:
         player["Team name"] = "Raptors"
+        first_practise_day = raptors_practise_time
+        first_practise_time = raptors_practise_time
     elif player in dragons:
         player["Team name"] = "Dragons"
+        first_practise_day = dragons_practise_day
+        first_practise_time = dragons_practise_time
     elif player in sharks:
         player["Team name"] = "Sharks"
+        first_practise_day = sharks_practise_day
+        first_practise_time = sharks_practise_time
+
+    letter += ("Soccer teams are made. We made teams so that every team" 
+            + "has equal amount of experienced players and teams average" 
+            + "heights are almost equal \n")
 
     letter += "Your child " + player['Name'] + " " 
     letter += "plays in team named " + player["Team name"] + "\n"
     letter += "Our first practise will be in " \
             + first_practise_day + " at " + first_practise_time + "."
-
+    letter += "\n" + "See you at the field!"
     return letter
 
 # Update teams to league
@@ -130,7 +146,7 @@ if __name__ == "__main__":
     #print_players(league, "League")
 
     for player in league:
-        file_name = player["Name"] + ".txt"
+        file_name = player["Name"].replace(" ", "_").lower() + ".txt"
         with open(file_name, "w") as letter:
             letter.write(write_letter(player))
 
