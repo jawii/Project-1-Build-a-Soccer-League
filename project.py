@@ -1,14 +1,12 @@
 import csv
-import random
-from datetime import date
-from operator import itemgetter, attrgetter
+from operator import itemgetter
 
-
-
-#'Soccer Experience': 
-#'Height' (inches)': '44', 
-#'Guardian Name(s)': 'Aaron and Jill Finkelstein' 
-#'Name': 'Ben Finkelstein'
+"""
+ 'Soccer Experience':
+ 'Height' (inches)': '44',
+ 'Guardian Name(s)': 'Aaron and Jill Finkelstein'
+ 'Name': 'Ben Finkelstein'
+"""
 
 league = []
 sharks = []
@@ -27,22 +25,25 @@ with open('soccer_players.csv') as csvfile:
     for row in reader:
         league.append(row)
 
-def print_players(lst, team_name):
-    print ("There are {} players in {}".format(len(lst), team_name))
-    print ("-------------------------")
-    print ("")
-    for player in lst:
-        print ("Name: ", player['Name'])
-        print ("XP: ", player['Soccer Experience'])
-        print ("Height (inches): ", player['Height (inches)'])
-        print ("Guardian Name(s): ", player['Guardian Name(s)'])
-        if 'Team name' in player.keys():
-            print ("Team name: ", player['Team name'])
 
-        print ("--------------------")
-        
+def print_players(lst, team_name):
+    print("There are {} players in {}".format(len(lst), team_name))
+    print("-------------------------")
+    print("")
+    for player in lst:
+        print("Name: ", player['Name'])
+        print("XP: ", player['Soccer Experience'])
+        print("Height (inches): ", player['Height (inches)'])
+        print("Guardian Name(s): ", player['Guardian Name(s)'])
+        if 'Team name' in player.keys():
+            print("Team name: ", player['Team name'])
+
+        print("--------------------")
+
+
 def split_list(lst, parts):
     return [lst[i::parts] for i in range(parts)]
+
 
 def get_average_height(players):
     total_height = 0
@@ -51,14 +52,15 @@ def get_average_height(players):
         total_height += int(player['Height (inches)'])
     return total_height / float(number_of_players)
 
+
 def sort_by_height(players):
-    return sorted(players, key = itemgetter('Height (inches)'))
+    return sorted(players, key=itemgetter('Height (inches)'))
 
-#print_players(align_with_height(league), "League")
+# print_players(align_with_height(league), "League")
 
 
-def make_teams(league, num_teams):   
-    #take experienced players away from league
+def make_teams(league, num_teams):
+    # take experienced players away from league
     xpPlayers = []
     league2 = league[:]
     for player in league:
@@ -67,20 +69,19 @@ def make_teams(league, num_teams):
             league2.remove(player)
     league = league2
 
-    #sort league and xpPlayers by height
+    # sort league and xpPlayers by height
     xpPlayers = sort_by_height(xpPlayers)
     league = sort_by_height(league)
 
-    #move experienced players back to league
+    # move experienced players back to league
     for player in xpPlayers:
         league.insert(0, player)
-    #print_players(league)
-    
-    #make teams
+    # print_players(league)
+
+    # make teams
     teams = split_list(league, num_teams)
 
     return tuple(team for team in teams)
-    
 
 
 def write_letter(player):
@@ -101,14 +102,17 @@ def write_letter(player):
         first_practise_day = sharks_practise_day
         first_practise_time = sharks_practise_time
 
-    letter += ("Soccer teams are made. We made teams so that every team" 
-            + "has equal amount of experienced players and teams average" 
-            + "heights are almost equal \n")
+    letter += (
+            "Soccer teams are made. We made teams so that every team"
+            "has equal amount of experienced players and teams average"
+            "heights are almost equal \n")
 
-    letter += "Your child " + player['Name'] + " " 
+    letter += "Your child " + player['Name'] + " "
     letter += "plays in team named " + player["Team name"] + "\n"
-    letter += "Our first practise will be in " \
-            + first_practise_day + " at " + first_practise_time + "."
+    letter += (
+            "Our first practise will be in "
+            + first_practise_day + " at " + first_practise_time + ".")
+
     letter += "\n" + "See you at the field!"
     return letter
 
@@ -124,11 +128,11 @@ for player in league:
 
 if __name__ == "__main__":
 
-    dragons, raptors , sharks = make_teams(league, 3)
+    dragons, raptors, sharks = make_teams(league, 3)
 
-    #print_players(dragons, "dragons")
-    #print_players(raptors, "raptors")
-    #print_players(sharks, "sharks")
+    # print_players(dragons, "dragons")
+    # print_players(raptors, "raptors")
+    # print_players(sharks, "sharks")
 
     league = list(dragons) + list(raptors) + list(sharks)
 
@@ -142,18 +146,17 @@ if __name__ == "__main__":
             player["Team name"] = "Sharks"
         else:
             player["Team name"] = "(no team)"
-    
-    #print_players(league, "League")
+
+# print_players(league, "League")
 
     for player in league:
         file_name = player["Name"].replace(" ", "_").lower() + ".txt"
         with open(file_name, "w") as letter:
             letter.write(write_letter(player))
 
-#print_players(dragons, "dragons")
-#print_players(raptors, "raptors")
-#print_players(sharks, "sharks")
-
-#print (get_average_height(raptors))
-#print (get_average_height(dragons))
-#print (get_average_height(sharks))
+# print_players(dragons, "dragons")
+# print_players(raptors, "raptors")
+# print_players(sharks, "sharks")
+# print (get_average_height(raptors))
+# print (get_average_height(dragons))
+# print (get_average_height(sharks))
