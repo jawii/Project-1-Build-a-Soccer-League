@@ -1,13 +1,27 @@
-import battleship
+import constants
 from board import Board
+from ships import ShipInfo
 
-PLAYER_1 = input("Type player 1 name: ")
-PLAYER_2 = input("Type player 2 name: ")
 
-battleship.clear_screen()
+class Game(object):
+	def __init__(self):
+		self.player1_board = Board()
+		self.player2_board = Board()
 
-board = Board()
+	def ask_names(self):
+		self.player1_name = input("Type Player 1 name: ")
+		self.player2_name = input("Type Player 2 name: ")
 
-battleship.print_board(board.rows)
+	def start_game(self):
+		print("**************************")
+		print("Welcome to Battleship game")
+		self.ask_names()
 
-print(board.rows)
+		player1_board.set_ships()
+		player2_board.set_ships()
+
+Game().start_game()
+
+
+
+
