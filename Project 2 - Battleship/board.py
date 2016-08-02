@@ -37,58 +37,34 @@ class Board(object):
         print("\033c", end="")
 
     def ask_coordinates(self, ship):
-
-            alpabets = [
-                        chr(c) for c in
-                        range(ord('a'), ord('a') + self.board_size)
+        ''' 
+        Returns coordinate tuple(row, col)
+        '''
+        alpabets = [
+                chr(c) for c in
+                range(ord('a'), ord('a') + self.board_size)
                     ]
 
-            while True:
-                coordinate = input(
-                        "Place the location (col, row) of the "
-                        + ship[0] + " (" + str(ship[1]) + " spaces): "
-                        )
-                coordinate = coordinate.replace(" ", "")
-                coordinate = (coordinate[0], coordinate[1:])
-                # print(coordinate)
-                try:
-                    row = int(coordinate[1])
-                    if row not in list(range(self.board_size + 1)):
-                        self.clear_screen()
-                        print("")
-                        print("Incorrect coordinate. Row number too high!")
-                        print("")
-                        print(self)
-                        continue
-                except ValueError:
-                    self.clear_screen()
-                    print("")
-                    print(
-                            "Can't find the row. "
-                            + "Type col first and then row. For Example 'a1'"
-                            )
-                    print("")
-                    print(self)
-                    continue
+        while True:
+            coordinate = input(
+                    "Place the location (col, row) of the "
+                    + ship[0] + " (" + str(ship[1]) + " spaces): "
+                    )
 
-                if coordinate[0].lower() not in alpabets:
-                    self.clear_screen()
-                    print("")
-                    print(
-                        "Incorrect coordinate."
-                        + "Can't find the column."
-                        + "Type column first and then row."
-                            )
-                    print("")
-                    print(self)
-                    continue
-                else:
-                    break
+            #
+            #
+            coordinate_info = self.is_coord_in_board(coordinate)
 
-            row = int(coordinate[1]) - 1
-            col = alpabets.index(coordinate[0])
-
-            return (row, col)
+            if coordinate_info[0]:
+                return coordinate_info[1]
+            else:
+                self.clear_screen()
+                print("!!!!!!!!!!!!!!!!!!!!!!!!!")
+                print(coordinate_info[1])
+                print("!!!!!!!!!!!!!!!!!!!!!!!!!")
+                print("")
+                print(self)
+                continue
 
     def ask_orient(self):
             horizontal = True
@@ -195,11 +171,41 @@ class Board(object):
     def is_coord_in_board(self, coordinate):
         ''' 
         Checks if player coordinate input is in board
-        Return tuple of col and rows
+        Return (False, error_string) if coodinate is not in board
+        Return (True, (row, col)) if coordinate is valid 
         '''
-        pass
+        alpabets = [
+            chr(c) for c in
+            range(ord('a'), ord('a') + self.board_size)
+            ]
+
+        error_string = ""
+        coordinate = coordinate.replace(" ", "")
+        coordinate = (coordinate[0], coordinate[1:])
+        
+        try:
+            row = int(coordinate[1])
+            if row not in list(range(self.board_size + 1)):
+                error_string = "Incorrect coordinate. Row number too high!"
+                return (False, error_string)
+        except ValueError:
+            error_string = "Can't find the row. Type col first and then row. For Example 'a1'."
+            return (False, error_string)
+
+        if coordinate[0].lower() not in alpabets:
+            error_string = "Incorrect coordinate." \
+                            "Can't find the column." \
+                            "Type column first and then row."
+            return (False, error_string)
+
+        row = int(coordinate[1]) - 1
+        col = alpabets.index(coordinate[0])
+        return (True, (row, col))
 
 
 # board = Board()
-# print(board.board)
-# board.set_ships()
+# print(board)
+# board.set_ships("")
+# print(board.is_coord_in_board("11"))
+
+

@@ -8,7 +8,7 @@ class Game(object):
         self.player1_board = board.Board()
         self.player1_guess_board = board.Board()
         self.player2_board = board.Board()
-        self.player1_guess_board = board.Board()
+        self.player2_guess_board = board.Board()
 
     def ask_names(self):
         self.player1_name = input("Type Player 1 name: ")
@@ -33,6 +33,10 @@ class Game(object):
         self.clear_screen()
 
     def check_win(self):
+        '''
+        If game is over return tuple (Fase, Winner_name)
+        If game is not over returns (True, "")
+        '''
         return (True, "")
 
 
@@ -54,15 +58,15 @@ class Game(object):
         while self.check_win()[0]:
             
             self.print_turn(self.player1_name)
-            attack(self.player2_board, self.player1_guess_board, self.player1_name)
+            attack(self.player1_board, self.player2_board, self.player1_guess_board, self.player1_name)
             self.clear_screen()
             self.print_turn(self.player2_name)
-            attack(self.player1_board, self.player2_guess_board, self.player2_name)
+            attack(self.player2_board, self.player1_board, self.player2_guess_board, self.player2_name)
             self.clear_screen()
 
 
 
-def attack(board_to_attack, guess_board, player1_name):
+def attack(own_board, board_to_attack, guess_board, player1_name):
 
         turn = True
 
@@ -73,29 +77,36 @@ def attack(board_to_attack, guess_board, player1_name):
             print(guess_board)
 
             print("Your own Board is below")
-            print(board)
+            print(own_board)
             print("Give attack (col, row) coordinates: ")
             attack_coordinate = input("--->")
             
-            if is_valid_attack(attack_coordinate, board_to_attack):
+            check_attack = is_valid_attack(attack_coordinate, board_to_attack)
+
+            if check_attack[0]:
                 # return if hit miss or invalid type
                 # update player2 board and own guess board
-                # turn = False
-                pass
+                turn = False
             else:
-                print("Not valid coordinate!")
-                continue
+                print(check_attack[1])
 
 
 
 def is_valid_attack(coordinate, enemy_board):
-    #
+    ''' 
+    Returns (True, hit/miss/sunk) or
+            (False, "errorstring"))
+    '''
     # check if coordinate is valid
+    is_coordinate_valid = enemy_board.is_coord_in_board(coordinate)
+
+    print("Enemy Board")
+    print (enemy_board)
+    print (is_coordinate_valid)
 
     # check if there is empty place in board at coordinate
-
-
-    return True
+    
+    return (True, "hit")
 
 
 
@@ -104,6 +115,11 @@ def is_valid_attack(coordinate, enemy_board):
 
 game = Game()
 game.start_game()
+
+
+#Test for is_valid_attack
+
+
 
 
 
