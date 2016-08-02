@@ -18,7 +18,6 @@ class Board(object):
 	def print_board_heading(self):
 		return ("   " + " ".join([chr(c) for c in range(ord('A'), ord('A') + self.board_size)]))
 
-	
 	def __str__(self):
 
 		string = ""
@@ -39,15 +38,36 @@ class Board(object):
 
 			while True:
 				coordinate = input("Place the location (col, row) of the " + ship[0] + " (" + str(ship[1]) + " spaces): " )
-				if len(coordinate) != 2:
+				coordinate = coordinate.replace(" ","")
+				coordinate = (coordinate[0], coordinate[1:])
+				#print(coordinate)
+				try:
+					row = int(coordinate[1])
+					if row not in list(range(self.board_size + 1)):
+						self.clear_screen()
+						print("")
+						print("Incorrect coordinate. Row number too high!")
+						print("")
+						print(board)
+						continue
+				except ValueError:
+					self.clear_screen()
+					print("")
+					print("Can't find the row. Type col first and then row. For Example 'a1'")
+					print("")
+					print(board)
 					continue
-				elif coordinate[0].lower() not in alpabets:
-					continue
-				elif coordinate[1] in list(range(self.board_size)):
+
+				if coordinate[0].lower() not in alpabets:
+					self.clear_screen()
+					print("")
+					print("Incorrect coordinate. Can't find the column. Type column first and then row.")
+					print("")
+					print(board)
 					continue
 				else:
 					break
-
+				
 			row = int(coordinate[1]) - 1
 			col = alpabets.index(coordinate[0])
 
@@ -109,6 +129,7 @@ class Board(object):
 				for place in range(ship_length):
 					if self.board[dummy_2][dummy_3] in forbidden_places:
 						are_there_ships = True
+						error_string = " \n You can't place ship there. There is already a ship. \n"
 			except IndexError:
 				are_there_ships = False
 
@@ -134,16 +155,18 @@ class Board(object):
 					ship_length = ship[1]
 					can_set = self.can_ship_set(row_col, ship_length, is_horizontal)
 					if can_set[0]:
+						self.clear_screen()
 						print(can_set[1])
 
 				self.place_ship(row_col, ship_length, is_horizontal)
+				self.clear_screen()
 			print(board)
 
 
 
-board = Board()
+#board = Board()
 #print(board.board)
-board.set_ships()
+#board.set_ships()
 
 
 		
