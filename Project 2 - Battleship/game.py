@@ -81,10 +81,26 @@ def attack(own_board, board_to_attack, guess_board, player1_name):
             print("Give attack (col, row) coordinates: ")
             attack_coordinate = input("--->")
             
-            check_attack = is_valid_attack(attack_coordinate, board_to_attack)
+            check_attack = attack_response(attack_coordinate, board_to_attack)
 
             if check_attack[0]:
-                # return if hit miss or invalid type
+                # check what check_attack returns
+                response = check_attack[1]
+
+                # if returns hit or miss, update board places
+                if response == "hit":
+                    guess_board.set_coord_mark(check_attack[2], "hit")
+                    board_to_attack.set_coord_mark(check_attack[2], "hit")
+                    print("You hitted the ship!")
+
+                elif response == "miss":
+                    guess_board.set_coord_mark(check_attack[2], "miss")
+                    board_to_attack.set_coord_mark(check_attack[2], "miss")
+                    print("You missed")
+
+                elif response == "sunk":
+                    print("You sunked a ship!!")
+
                 # update player2 board and own guess board
                 turn = False
             else:
@@ -92,32 +108,55 @@ def attack(own_board, board_to_attack, guess_board, player1_name):
 
 
 
-def is_valid_attack(coordinate, enemy_board):
+def attack_response(coordinate, enemy_board):
     ''' 
-    Returns (True, hit/miss/sunk) or
-            (False, "errorstring"))
+    Returns (True, "hit"/"miss"/"sunk"/"hitted", (row, col)) or
+            (False, "errorstring")
     '''
-    # check if coordinate is valid
-    is_coordinate_valid = enemy_board.is_coord_in_board(coordinate)
+    
+    coordinate_info = enemy_board.is_coord_in_board(coordinate)
+    
 
-    print("Enemy Board")
-    print (enemy_board)
-    print (is_coordinate_valid)
+    # check if coordinate is valid
+    if not coordinate_info[0]:
+        return (False, coordinate_info[1])
+
+    coordinate_mark = enemy_board.get_coord_info(coordinate_info[1])
 
     # check if there is empty place in board at coordinate
-    
-    return (True, "hit")
+    if coordinate_mark == enemy_board.empty_mark:
+        return (True, "miss", coordinate_info[1])
 
+    if coordinate_mark == enemy_board.hit_mark or coordinate_mark == enemy_board.sunk_mark:
+        return (True, "hitted", coordinate_info[1])
 
+    hit_mark_1 = coordinate_mark == enemy_board.vertical_ship_mark
+    hit_mark_2 = coordinate_mark == enemy_board.horizontal_ship_mark
+    hit = hit_mark_1 or hit_mark_2
 
+    if hit:
+        # print("Coordinate mark is: " + str(coordinate_info[1]))
+        # print("Ship coordinates are: " + str(enemy_board.ships_coordinates))
+        #locate ship and remove the length
+        for ship in enemy_board.ships_coordinates:
+            if coordinate_info[1] in ship:
+                #length is second on the list
+                ship[1] -= 1
+        #check for sunkness
+        for ship in enemy_board.ships_coordinates:
+            if ship[1] == 0:
+                #set all ship marks to sunk and then return sunkness
+                coords = ship[2:]
+                for coord in coords:
+                    enemy_board.set_coord_mark(coord, "sunk")
+                return (True, "sunk", coordinate_info[1])
 
+        return(True, "hit", coordinate_info[1])
 
 
 game = Game()
 game.start_game()
 
-
-#Test for is_valid_attack
 
 
 

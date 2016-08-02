@@ -18,6 +18,7 @@ class Board(object):
                 for y in range(self.board_size)
                 ]
         self.ships = ships.ship_info.ships
+        self.ships_coordinates = []
 
     def print_board_heading(self):
         return ("   " + " ".join([chr(c)
@@ -80,20 +81,27 @@ class Board(object):
 
             return horizontal
 
-    def place_ship(self, row_col, ship_length, is_horizontal):
+    def place_ship(self, row_col, ship, is_horizontal):
 
         row = row_col[0]
         col = row_col[1]
+        ship_length = ship[1]
+        self.ships_coordinates.append([ship[0]])
+        self.ships_coordinates[-1].append(ship[1])
 
         if is_horizontal:
             mark = self.horizontal_ship_mark
             for place in range(ship_length):
                 self.board[row][col + place] = mark
+                # update ship coordinates
+                self.ships_coordinates[-1].append((row, col + place))
         else:
             mark = self.vertical_ship_mark
             for place in range(ship_length):
                 self.board[row + place][col] = mark
-
+                # update ship coordinates
+                self.ships_coordinates[-1].append((row, col + place))
+            
     def can_ship_set(self, row_col, ship_length, is_horizontal):
 
         error_string = "\n You can't place ship there.\n"
@@ -164,15 +172,15 @@ class Board(object):
                         self.clear_screen()
                         print(can_set[1])
 
-                self.place_ship(row_col, ship_length, is_horizontal)
+                self.place_ship(row_col, ship, is_horizontal)
                 self.clear_screen()
             #print(self)
 
     def is_coord_in_board(self, coordinate):
         ''' 
         Checks if player coordinate input is in board
-        Return (False, error_string) if coodinate is not in board
-        Return (True, (row, col)) if coordinate is valid 
+        Returns (False, error_string) if coodinate is not in board
+        Returns (True, (row, col)) if coordinate is valid 
         '''
         alpabets = [
             chr(c) for c in
@@ -202,10 +210,50 @@ class Board(object):
         col = alpabets.index(coordinate[0])
         return (True, (row, col))
 
+    def get_coord_info(self, row_col):
+        """
+        Returns what mark is in coord:
+        """
+        row = row_col[0]
+        col = row_col[1]
+
+        return self.board[row][col]
+
+    def set_coord_mark(self, row_col, mark):
+        '''
+        Valid marks: empty, hit, miss, sunk
+        Return nothing
+        '''
+        if mark == "empty":
+            _mark = self.empty_mark
+        
+        elif mark == "hit":
+            _mark = self.hit_mark
+        
+        elif mark == "miss":
+            _mark = self.miss_mark
+        
+        elif mark == "sunk":
+            _mark = self.sunk_mark
+
+        row = row_col[0]
+        col = row_col[1]
+
+        self.board[row][col] = _mark
+
+
+
+
+
 
 # board = Board()
 # print(board)
-# board.set_ships("")
+# board.place_ship((1,1), board.ships[1], True)
+# board.place_ship((2,1), board.ships[2], True)
+
+# print(board)
+# print(board.ships_coordinates)
+
 # print(board.is_coord_in_board("11"))
 
 
