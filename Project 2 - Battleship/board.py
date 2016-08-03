@@ -1,7 +1,9 @@
 import constants
 import ships
 import logging
-logging.basicConfig(filename='game_debug.log',level=logging.DEBUG)
+
+logging.basicConfig(filename='game_debug.log', level=logging.DEBUG)
+
 
 class Board(object):
     """Board class for battleship - game"""
@@ -39,13 +41,9 @@ class Board(object):
         print("\033c", end="")
 
     def ask_coordinates(self, ship):
-        ''' 
+        '''
         Returns coordinate tuple(row, col)
         '''
-        alpabets = [
-                chr(c) for c in
-                range(ord('a'), ord('a') + self.board_size)
-                    ]
 
         while True:
             coordinate = input(
@@ -101,8 +99,8 @@ class Board(object):
             for place in range(ship_length):
                 self.board[row + place][col] = mark
                 # update ship coordinates
-                self.ships_coordinates[-1].append((row, col + place))
-            
+                self.ships_coordinates[-1].append((row + place, col))
+
     def can_ship_set(self, row_col, ship_length, is_horizontal):
 
         error_string = "\n You can't place ship there.\n"
@@ -179,8 +177,8 @@ class Board(object):
             self.clear_screen()
 
         while True:
-            logging.debug(str(self.ships_coordinates))
-            logging.debug(str(self.board))
+            # logging.debug(str(self.ships_coordinates))
+            # logging.debug(print(self))
             print("")
             print("All ships set.")
             print("Your ships are seiling at positions: ")
@@ -195,10 +193,10 @@ class Board(object):
         self.clear_screen()
 
     def is_coord_in_board(self, coordinate):
-        ''' 
+        '''
         Checks if player coordinate input is in board
         Returns (False, error_string) if coodinate is not in board
-        Returns (True, (row, col)) if coordinate is valid 
+        Returns (True, (row, col)) if coordinate is valid
         '''
         alpabets = [
             chr(c) for c in
@@ -211,14 +209,17 @@ class Board(object):
         error_string = ""
         coordinate = coordinate.replace(" ", "")
         coordinate = (coordinate[0], coordinate[1:])
-        
+
         try:
             row = int(coordinate[1])
             if row not in list(range(self.board_size + 1)):
                 error_string = "Incorrect coordinate. Row number too high!"
                 return (False, error_string)
         except ValueError:
-            error_string = "Can't find the row. Type col first and then row. For Example 'a1'."
+            error_string = (
+                        "Can't find the row."
+                        "Type col first and then row. For Example 'a1'."
+                        )
             return (False, error_string)
 
         if coordinate[0].lower() not in alpabets:
@@ -247,13 +248,13 @@ class Board(object):
         '''
         if mark == "empty":
             _mark = self.empty_mark
-        
+
         elif mark == "hit":
             _mark = self.hit_mark
-        
+
         elif mark == "miss":
             _mark = self.miss_mark
-        
+
         elif mark == "sunk":
             _mark = self.sunk_mark
 
@@ -261,20 +262,3 @@ class Board(object):
         col = row_col[1]
 
         self.board[row][col] = _mark
-
-
-
-
-
-
-# board = Board()
-# print(board)
-# board.place_ship((1,1), board.ships[1], True)
-# board.place_ship((2,1), board.ships[2], True)
-
-# print(board)
-# print(board.ships_coordinates)
-
-# print(board.is_coord_in_board("11"))
-
-
