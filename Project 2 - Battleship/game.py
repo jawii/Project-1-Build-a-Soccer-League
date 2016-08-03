@@ -1,7 +1,10 @@
 import constants
 import board
 from ships import ShipInfo
+import logging
+logging.basicConfig(filename='game_debug.log',level=logging.DEBUG)
 
+logging.debug('DEBUGGIN STARTED')
 
 class Game(object):
     def __init__(self):
@@ -22,22 +25,50 @@ class Game(object):
 
         turn_string = "----------------------------- \n"
         turn_string += player_name +"'s" + " turn. \n" 
-        turn_string += "Press Enter to Continue \n"
         turn_string += "----------------------------"
+        print(turn_string)
 
-        while True:
-            print(turn_string)
-            continue_ = input("")
-            if continue_ == "":
-                break
+        enter_to_continue()
+
         self.clear_screen()
 
-    def check_win(self):
+    def are_ships_left(self, board):
         '''
-        If game is over return tuple (Fase, Winner_name)
+        Returns True if ships left
+        Returns False if no ships left
+        '''
+        ship_marks = [
+            board.vertical_ship_mark,
+            board.horizontal_ship_mark
+            ]
+
+        are_ship = False
+
+        for place in board.board:
+            # print("Place is: " + str(place))
+            for mark in place:
+                # print("Mark is: " + str(mark))
+                if mark in ship_marks: 
+                    are_ship = True
+        
+        logging.debug('are_ships_left returned ' + str(are_ship))
+        return are_ship
+
+
+    def check_win(self, player1board, player1name, player2board, player2name):
+        '''
+        If game is over return tuple (False, Winner_name)
         If game is not over returns (True, "")
         '''
-        return (True, "")
+        if not self.are_ships_left(player1board):
+            logging.debug('check_win returned False and Player1 name')
+            return (False, player2name)
+        elif not self.are_ships_left(player2board):
+            logging.debug('check_win returned False and Player2 name')
+            return (False, player1name)
+        else:
+            logging.debug('check_win returned (True "")')
+            return (True, "")
 
 
     def start_game(self):
@@ -47,6 +78,22 @@ class Game(object):
         print("Welcome to Battleship game")
         print("")
         print("**************************")
+        print("")
+        print("Board Size is " + str(constants.BOARD_SIZE))
+        print(
+            "Marks are: \nVertical ship mark: {} \nHorizontal ship mark: {}\n" 
+            "Empty mark: {} \nMiss mark: {} \nHit mark: {} \n"
+            "Sunk mark: {}".format(
+                    constants.VERTICAL_SHIP,
+                    constants.HORIZONTAL_SHIP,
+                    constants.EMPTY,
+                    constants.MISS,
+                    constants.HIT,
+                    constants.SUNK
+                    )    
+                )
+        print("")
+
         self.ask_names()
 
         self.clear_screen()
@@ -55,14 +102,35 @@ class Game(object):
         self.print_turn(self.player2_name)
         self.player2_board.set_ships(self.player2_name)
 
-        while self.check_win()[0]:
+        winner_info = self.check_win(self.player1_board, self.player1_name, self.player2_board, self.player2_name)
+        
+        while winner_info[0]:
             
             self.print_turn(self.player1_name)
             attack(self.player1_board, self.player2_board, self.player1_guess_board, self.player1_name)
             self.clear_screen()
+
+            winner_info = self.check_win(self.player1_board, self.player1_name, self.player2_board, self.player2_name)
+            if not winner_info[0]:
+                break
+
             self.print_turn(self.player2_name)
             attack(self.player2_board, self.player1_board, self.player2_guess_board, self.player2_name)
             self.clear_screen()
+
+            winner_info = self.check_win(self.player1_board, self.player1_name, self.player2_board, self.player2_name)
+
+        print("")
+        print("***************************")
+        print("Game over!")
+        print("Winner is: " + winner_info[1])
+        print("***************************")
+        print("")
+
+        print("Player: {} board was:".format(self.player1_name))
+        print(self.player1_board)
+        print("Player: {} board was:".format(self.player2_name))
+        print(self.player2_board)
 
 
 
@@ -71,17 +139,22 @@ def attack(own_board, board_to_attack, guess_board, player1_name):
         turn = True
 
         while turn:
-
+            print("")
             print("Welcome " + player1_name)
+            print("")
             print("Your Guess Board is below")
             print(guess_board)
+            print("")
 
+            print("")
             print("Your own Board is below")
+            print("")
             print(own_board)
             print("Give attack (col, row) coordinates: ")
+            print("")
             attack_coordinate = input("--->")
             
-            check_attack = attack_response(attack_coordinate, board_to_attack)
+            check_attack = attack_response(attack_coordinate, board_to_attack, guess_board)
 
             if check_attack[0]:
                 # check what check_attack returns
@@ -91,24 +164,39 @@ def attack(own_board, board_to_attack, guess_board, player1_name):
                 if response == "hit":
                     guess_board.set_coord_mark(check_attack[2], "hit")
                     board_to_attack.set_coord_mark(check_attack[2], "hit")
+                    print("--------------------")
                     print("You hitted the ship!")
-
+                    print("--------------------")
+                    turn = False
+                
                 elif response == "miss":
                     guess_board.set_coord_mark(check_attack[2], "miss")
                     board_to_attack.set_coord_mark(check_attack[2], "miss")
+                    print("--------------------")
                     print("You missed")
-
+                    print("--------------------")
+                    turn = False
+                
                 elif response == "sunk":
+                    print("--------------------")
                     print("You sunked a ship!!")
-
-                # update player2 board and own guess board
-                turn = False
+                    print("--------------------")
+                    turn = False
+                
+                elif response == "hitted":
+                    print("--------------------")
+                    print("You have alredy attacked on that position!")
+                    print("--------------------")
+                    enter_to_continue()
+                    continue                
             else:
+                print("\033c", end="")
                 print(check_attack[1])
+            enter_to_continue()
 
 
 
-def attack_response(coordinate, enemy_board):
+def attack_response(coordinate, enemy_board, guess_board):
     ''' 
     Returns (True, "hit"/"miss"/"sunk"/"hitted", (row, col)) or
             (False, "errorstring")
@@ -127,7 +215,8 @@ def attack_response(coordinate, enemy_board):
     if coordinate_mark == enemy_board.empty_mark:
         return (True, "miss", coordinate_info[1])
 
-    if coordinate_mark == enemy_board.hit_mark or coordinate_mark == enemy_board.sunk_mark:
+    hitted_marks = [enemy_board.hit_mark, enemy_board.sunk_mark, enemy_board.miss_mark]
+    if coordinate_mark in hitted_marks:
         return (True, "hitted", coordinate_info[1])
 
     hit_mark_1 = coordinate_mark == enemy_board.vertical_ship_mark
@@ -149,10 +238,20 @@ def attack_response(coordinate, enemy_board):
                 coords = ship[2:]
                 for coord in coords:
                     enemy_board.set_coord_mark(coord, "sunk")
+                    guess_board.set_coord_mark(coord, "sunk")
+                #remove ship from coordinate list
+                enemy_board.ships_coordinates.remove(ship)
+
                 return (True, "sunk", coordinate_info[1])
 
         return(True, "hit", coordinate_info[1])
 
+
+def enter_to_continue():
+    while True:
+            continue_ = input("Press Enter to Continue \n")
+            if continue_ == "":
+                break
 
 game = Game()
 game.start_game()

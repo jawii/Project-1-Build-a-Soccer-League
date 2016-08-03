@@ -1,6 +1,7 @@
 import constants
 import ships
-
+import logging
+logging.basicConfig(filename='game_debug.log',level=logging.DEBUG)
 
 class Board(object):
     """Board class for battleship - game"""
@@ -143,38 +144,55 @@ class Board(object):
 
     def set_ships(self, player_name):
 
-            for ship in self.ships:
+        for ship in self.ships:
 
-                row_col = None
-                is_horizontal = None
-                ship_length = None
+            row_col = None
+            is_horizontal = None
+            ship_length = None
+
+            can_set = self.can_ship_set(
+                    row_col,
+                    ship_length,
+                    is_horizontal
+                    )
+
+            while can_set[0]:
+                print("")
+                print("Put the ships " + player_name)
+                print("")
+                print(self)
+                row_col = self.ask_coordinates(ship)
+                is_horizontal = self.ask_orient()
+                ship_length = ship[1]
 
                 can_set = self.can_ship_set(
-                        row_col,
-                        ship_length,
-                        is_horizontal
-                        )
+                    row_col,
+                    ship_length,
+                    is_horizontal
+                    )
 
-                while can_set[0]:
-                    print("Put the ships " + player_name)
-                    print(self)
-                    row_col = self.ask_coordinates(ship)
-                    is_horizontal = self.ask_orient()
-                    ship_length = ship[1]
+                if can_set[0]:
+                    self.clear_screen()
+                    print(can_set[1])
 
-                    can_set = self.can_ship_set(
-                        row_col,
-                        ship_length,
-                        is_horizontal
-                        )
+            self.place_ship(row_col, ship, is_horizontal)
+            self.clear_screen()
 
-                    if can_set[0]:
-                        self.clear_screen()
-                        print(can_set[1])
-
-                self.place_ship(row_col, ship, is_horizontal)
+        while True:
+            logging.debug(str(self.ships_coordinates))
+            logging.debug(str(self.board))
+            print("")
+            print("All ships set.")
+            print("Your ships are seiling at positions: ")
+            print("")
+            print(self)
+            print("")
+            continue_ = input("Press Enter to Continue \n")
+            if continue_ == "":
+                break
+            else:
                 self.clear_screen()
-            #print(self)
+        self.clear_screen()
 
     def is_coord_in_board(self, coordinate):
         ''' 
@@ -186,6 +204,9 @@ class Board(object):
             chr(c) for c in
             range(ord('a'), ord('a') + self.board_size)
             ]
+
+        if coordinate == "":
+            return (False, "Empty input:")
 
         error_string = ""
         coordinate = coordinate.replace(" ", "")

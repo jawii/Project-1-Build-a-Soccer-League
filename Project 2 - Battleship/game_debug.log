@@ -1,0 +1,119 @@
+DEBUG:root:DEBUGGIN STARTED
+DEBUG:root:are_ships_left returned: False
+DEBUG:root:are_ships_left returned: True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned: False
+DEBUG:root:are_ships_left returned: True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:DEBUGGIN STARTED
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:DEBUGGIN STARTED
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned False
+DEBUG:root:check_win returned False and Player2 name
+DEBUG:root:DEBUGGIN STARTED
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:DEBUGGIN STARTED
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned False
+DEBUG:root:check_win returned False and Player2 name
+DEBUG:root:DEBUGGIN STARTED
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned False
+DEBUG:root:check_win returned False and Player1 name
+DEBUG:root:DEBUGGIN STARTED
+DEBUG:root:DEBUGGIN STARTED
+DEBUG:root:DEBUGGIN STARTED
+DEBUG:root:DEBUGGIN STARTED
+DEBUG:root:DEBUGGIN STARTED
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:are_ships_left returned True
+DEBUG:root:are_ships_left returned True
+DEBUG:root:check_win returned (True "")
+DEBUG:root:DEBUGGIN STARTED
+DEBUG:root:[['Aircraft Carrier', 5, (0, 0), (0, 1), (0, 2), (0, 3), (0, 4)], ['Patrol Boat', 2, (5, 0), (5, 1)]]
+DEBUG:root:[['-', '-', '-', '-', '-', 'O'], ['O', 'O', 'O', 'O', 'O', 'O'], ['O', 'O', 'O', 'O', 'O', 'O'], ['O', 'O', 'O', 'O', 'O', 'O'], ['O', 'O', 'O', 'O', 'O', 'O'], ['-', '-', 'O', 'O', 'O', 'O']]
