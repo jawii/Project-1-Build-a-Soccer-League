@@ -22,7 +22,7 @@ import datetime
 # import csv
 import re
 import math
-
+import sys
 
 def sort_list_of_dates(datelist):
     dates = [datetime.datetime.strptime(ts, "%m/%d/%Y") for ts in datelist]
@@ -41,7 +41,7 @@ def press_enter_to_continue():
 class WorkLog():
 
     welcome_text = "\n*** WELCOME TO WORK LOG *** \n If you want to add new entry, type Add. \n If you want to Lookup" \
-                   " older entries type lookup \n"
+                   " older entries type lookup \n Type Quit to exit the program."
     tasks_log_file = 'tasks_log.csv'
 
     def task_or_lookup(self):
@@ -52,8 +52,9 @@ class WorkLog():
                 self.add_task()
             elif user_choice.lower() == 'lookup':
                 self.lookup_selection()
-                break
-        # TODO Add something to exit the program
+            elif user_choice.lower() == 'quit':
+                sys.exit()
+
 
     def add_task(self):
         print("\n*** Add task ***")
@@ -160,9 +161,9 @@ class WorkLog():
             else:
                 print("{} was invalid input.".format(user_input))
 
-    def read_tasks_to_dic(self):
+    def read_tasks_to_dic(self, file):
 
-        work_log = self.open_file()
+        work_log = file
         # find dates and puts them to dictionary:
 
         line = re.compile(r'''
@@ -198,7 +199,7 @@ class WorkLog():
         '''
         print("*** Find by Date ***\n")
 
-        list_of_tasks = self.read_tasks_to_dic()
+        list_of_tasks = self.read_tasks_to_dic(self.open_file())
         # print(list_of_tasks)
 
         # remove duplicates and put the dates in order
@@ -239,7 +240,7 @@ class WorkLog():
         ''' find entries within a range of time spent on a task'''
         print("*** Find by Time ***\n")
 
-        list_of_tasks = self.read_tasks_to_dic()
+        list_of_tasks = self.read_tasks_to_dic(self.open_file())
 
         while True:
             lower_bound = input("Type lower bound of time (minutes) spend on task."
@@ -293,13 +294,24 @@ class WorkLog():
         entries containing that string in the task name or notes.
         :return:
         '''
-        print("*** Find by exact search \n***")
+        print("*** Find by exact search ***\n")
 
-        search_string = input("What you want to search?")
+        search_string = input("What you want to search?\n > ")
 
-        work_log = self.open_file()
+        matched_tasks_string = ""
+        with open(self.tasks_log_file) as log_file:
+            for line in log_file:
+                if search_string in line:
+                    matched_tasks_string += line + "\n"
+        # print(matched_tasks_string)
 
+        matched_tasks = self.read_tasks_to_dic(matched_tasks_string)
 
+        print("** Search results **\n")
+        for task in matched_tasks:
+            self.print_task(task)
+        press_enter_to_continue()
+        self.lookup_selection()
 
     def find_by_pattern(self):
         '''
@@ -307,16 +319,28 @@ class WorkLog():
         I should be allowed to enter a regular expression and
         then be presented with entries matching that pattern in their task name or notes.
         '''
-        print("*** Find by Pattern ***")
-        pass
+        print("*** Find by Pattern ***\n")
 
+        user_re = input("Give regular expression to search.\n > ")
+        log_file = self.open_file()
+        line = re.findall(user_re, log_file)
+        # print(line)
 
+        matched_tasks_string = ""
+        with open(self.tasks_log_file) as log_file:
+            for match in line:
+                for lines in log_file:
+                    if match in lines:
+                        matched_tasks_string += lines + "\n"
+        matched_tasks = self.read_tasks_to_dic(matched_tasks_string)
+        # print(matched_tasks)
 
-
-        # find by date
-        # find by time spent
-        # find by exact search
-        # find by pattern
+        # no DRY here
+        print("** Search results **\n")
+        for task in matched_tasks:
+            self.print_task(task)
+        press_enter_to_continue()
+        self.lookup_selection()
 
     def write_task_to_log(self, string):
         with open(self.tasks_log_file, 'a') as csvfile:
@@ -333,12 +357,13 @@ class WorkLog():
     def clear_screen(self):
         print("\033c", end="")
 
-# WorkLog().task_or_lookup()
+WorkLog().task_or_lookup()
 
-work = WorkLog()
+# work = WorkLog()
 # work.add_task()
-work.lookup_selection()
+# work.lookup_selection()
 # work.task_or_lookup()
 # work.find_by_date()
 # work.find_by_time_spend()
-# 07/22/1988 12:35
+# work.find_by_search()
+# work.find_by_pattern()
