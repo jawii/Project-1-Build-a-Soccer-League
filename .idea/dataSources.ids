@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source name="Sqlite (Xerial) - worklogs.db" uuid="f0fb6e0b-bd99-49ae-b2fb-b5cc3ac5a0ef">
+    <database-info product="SQLite" version="3.8.11" jdbc-version="2.1" driver-name="SQLiteJDBC" driver-version="native"/>
+    <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed"/>
+    <database-model serializer="dbm" rdbms="SQLITE" format-version="2.6">
+      <schema id="1">
+        <visible>1</visible>
+      </schema>
+      <table id="2" parent="1" name="worklog"/>
+      <column id="3" parent="2" name="id">
+        <mandatory>1</mandatory>
+        <data-type>INTEGER(0,-1)|4</data-type>
+      </column>
+      <column id="4" parent="2" name="worker">
+        <mandatory>1</mandatory>
+        <data-type>VARCHAR(255)(0,-1)|12</data-type>
+      </column>
+      <column id="5" parent="2" name="task_name">
+        <mandatory>1</mandatory>
+        <data-type>VARCHAR(255)(0,-1)|12</data-type>
+      </column>
+      <column id="6" parent="2" name="timestamp">
+        <mandatory>1</mandatory>
+        <data-type>DATETIME(0,-1)|12</data-type>
+      </column>
+      <column id="7" parent="2" name="task_time">
+        <mandatory>1</mandatory>
+        <data-type>DATETIME(0,-1)|12</data-type>
+      </column>
+      <column id="8" parent="2" name="notes">
+        <mandatory>1</mandatory>
+        <data-type>TEXT(0,-1)|12</data-type>
+      </column>
+      <key id="9" parent="2">
+        <columns>id</columns>
+        <primary>1</primary>
+      </key>
+    </database-model>
+  </data-source>
+</component>

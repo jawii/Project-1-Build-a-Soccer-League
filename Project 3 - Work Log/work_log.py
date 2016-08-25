@@ -112,7 +112,7 @@ class WorkLog():
 
         task_string += notes_input + ","
 
-        # Cofirm Task
+        # Confirm Task
         print("")
         print("*** Confirm Task ***")
         print("Task start date: {} \n"
